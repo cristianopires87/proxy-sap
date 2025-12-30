@@ -15,4 +15,11 @@ ENV PORT=8080
 EXPOSE 8080
 
 # Gera config final e sobe o nginx
-CMD sh -c "envsubst < /etc/nginx/templates/default.conf.template > /etc/nginx/conf.d/default.conf && nginx -g 'daemon off;'"
+CMD sh -c "
+envsubst < /etc/nginx/templates/default.conf.template > /etc/nginx/conf.d/default.conf &&
+echo '========== GENERATED NGINX CONF ==========' &&
+nl -ba /etc/nginx/conf.d/default.conf &&
+echo '=========================================' &&
+nginx -t
+"
+
