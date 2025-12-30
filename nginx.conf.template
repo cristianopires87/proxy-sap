@@ -1,3 +1,14 @@
+# =========================
+# Map de headers (resolve espaço / newline)
+# =========================
+map $env_CPI_AUTH $auth_header {
+  default $env_CPI_AUTH;
+}
+
+map $env_CPI_HOST $upstream_host {
+  default $env_CPI_HOST;
+}
+
 server {
   listen ${PORT} default_server;
   listen [::]:${PORT} default_server;
