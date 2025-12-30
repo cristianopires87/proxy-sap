@@ -9,7 +9,7 @@ server {
   }
 
   # Endpoint que o SAP chama
-  location = /http/proxy {
+  location /http/proxy {
 
     # =========================
     # Basic Auth (SAP → NGINX)
