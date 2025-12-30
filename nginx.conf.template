@@ -3,19 +3,12 @@ server {
   listen [::]:${PORT} default_server;
   server_name _;
 
-  # Healthcheck
   location /healthz {
     return 200 "ok\n";
   }
 
-  # Endpoint SAP
   location /http/proxy {
-
-    # Proxy HTTP → HTTPS
     proxy_pass ${CPI_URL};
-
-    # NÃO setar headers manualmente
-    # NGINX repassa os headers automaticamente
 
     proxy_ssl_server_name on;
     proxy_ssl_verify on;
