@@ -26,7 +26,7 @@ server {
     proxy_set_header X-Forwarded-Proto https;
 
     # Auth para o CPI (vem de variável)
-    proxy_set_header Authorization "Basic ${CPI_AUTH}";
+    proxy_set_header Authorization "${CPI_AUTH}";
 
     # =========================
     # TLS / SNI
