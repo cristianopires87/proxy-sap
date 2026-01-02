@@ -1,26 +1,35 @@
 server {
-  listen 0.0.0.0:${PORT};
+  listen ${PORT};
   server_name _;
 
-  # Healthcheck Railway
+  # =========================
+  # Healthcheck (Railway)
+  # =========================
   location /healthz {
     return 200 "ok\n";
   }
 
-  # Proxy SAP -> CPI
+  # =========================
+  # Proxy para SAP CPI
+  # =========================
   location /http/proxy {
-    proxy_pass https://71c5c840trial.it-cpitrial06-rt.cfapps.us10-001.hana.ondemand.com/http/proxy;
 
-    # TLS / SSL
+    proxy_pass ${CPI_URL};
+
+    # -------- TLS ----------
     proxy_ssl_server_name on;
     proxy_ssl_verify on;
     proxy_ssl_trusted_certificate /etc/ssl/certs/ca-certificates.crt;
 
-    # AUTH HARDCODE (MESMO DO POSTMAN QUE FUNCIONA)
-    proxy_set_header Authorization "Basic c2ItMGZkMTg3NTctOWQ4Zi00MGFjLTlhZjItNWM4OGM1MjAzY2Q0IWI1NjYzOTF8aXQtcnQtNzFjNWM4NDB0cmlhbCFiNTUyMTU6MzE5MGM5YjQtYzk0Mi00ZmY5LThkNGMtYzFhYTllZjJkYzEyJHliUTFKT3F3aWdKR2t0NmdXUF9pUm1pRDJLZW5NR0VFT25GNXkzLWZsT289";
+    # -------- Headers ----------
+    proxy_set_header Host ${CPI_HOST};
+    proxy_set_header Authorization ${CPI_AUTH};
 
-    # Headers importantes
-    proxy_set_header Host 71c5c840trial.it-cpitrial06-rt.cfapps.us10-001.hana.ondemand.com;
-    proxy_set_header Content-Type application/json;
+    proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
+    proxy_set_header X-Forwarded-Proto https;
+
+    # -------- CSRF (pass-through) ----------
+    proxy_set_header X-CSRF-Token $http_x_csrf_token;
+    proxy_set_header Cookie $http_cookie;
   }
 }
