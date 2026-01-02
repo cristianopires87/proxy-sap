@@ -1,35 +1,15 @@
 server {
-  listen ${PORT};
+  listen 0.0.0.0:${PORT};
   server_name _;
 
-  # =========================
-  # Healthcheck (Railway)
-  # =========================
+  # Healthcheck
   location /healthz {
     return 200 "ok\n";
   }
 
-  # =========================
-  # Proxy para SAP CPI
-  # =========================
+  # Teste direto SEM AUTH, SEM HEADER, SEM TLS CHECK
   location /http/proxy {
-
     proxy_pass ${CPI_URL};
-
-    # -------- TLS ----------
-    proxy_ssl_server_name on;
-    proxy_ssl_verify on;
-    proxy_ssl_trusted_certificate /etc/ssl/certs/ca-certificates.crt;
-
-    # -------- Headers ----------
-    proxy_set_header Host ${CPI_HOST};
-    proxy_set_header Authorization ${CPI_AUTH};
-
-    proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
-    proxy_set_header X-Forwarded-Proto https;
-
-    # -------- CSRF (pass-through) ----------
-    proxy_set_header X-CSRF-Token $http_x_csrf_token;
-    proxy_set_header Cookie $http_cookie;
+    proxy_ssl_verify off;
   }
 }
