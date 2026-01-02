@@ -14,8 +14,10 @@ server {
     proxy_ssl_verify on;
     proxy_ssl_trusted_certificate /etc/ssl/certs/ca-certificates.crt;
 
-    # Headers
-    proxy_set_header Authorization "${CPI_AUTH}";
-    proxy_set_header Host $host;
+    # Authorization INJETADO PELO NGINX
+    proxy_set_header Authorization ${CPI_AUTH};
+
+    # Host correto para o CPI
+    proxy_set_header Host 71c5c840trial.it-cpitrial06-rt.cfapps.us10-001.hana.ondemand.com;
   }
 }
