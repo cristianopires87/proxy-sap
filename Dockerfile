@@ -13,5 +13,9 @@ ENV PORT=8080
 
 EXPOSE 8080
 
-# Gera o conf e sobe o nginx
-CMD sh -c "envsubst < /etc/nginx/templates/default.conf.template > /etc/nginx/conf.d/default.conf && nginx -g 'daemon off;'"
+CMD sh -c "envsubst '$PORT $CPI_URL $CPI_HOST' \
+  < /etc/nginx/templates/default.conf.template \
+  > /etc/nginx/conf.d/default.conf && \
+  nginx -g 'daemon off;'"
+
+
