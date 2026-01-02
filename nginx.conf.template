@@ -8,7 +8,6 @@ server {
 
   location = /http/proxy {
 
-    # Auth SAP -> Proxy
     auth_basic "SAP Proxy";
     auth_basic_user_file /etc/nginx/.htpasswd;
 
@@ -18,9 +17,7 @@ server {
     proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
     proxy_set_header X-Forwarded-Proto https;
 
-    #  Authorization 
-    set $cpi_auth $env_CPI_AUTH;
-    proxy_set_header Authorization $cpi_auth;
+    proxy_set_header Authorization $$env_CPI_AUTH;
 
     proxy_ssl_server_name on;
     proxy_ssl_verify on;
