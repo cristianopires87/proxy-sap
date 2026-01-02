@@ -10,7 +10,9 @@ COPY nginx.conf.template /etc/nginx/templates/default.conf.template
 
 EXPOSE 8080
 
-CMD sh -c "envsubst '$PORT $CPI_URL $CPI_HOST' \
+CMD sh -c "export PORT=${PORT:-8080} && \
+  envsubst '$PORT $CPI_URL $CPI_HOST' \
   < /etc/nginx/templates/default.conf.template \
   > /etc/nginx/conf.d/default.conf && \
   nginx -g 'daemon off;'"
+
