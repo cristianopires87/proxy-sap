@@ -9,8 +9,13 @@ server {
   location /http/proxy {
     proxy_pass ${CPI_URL};
 
+    # TLS
     proxy_ssl_server_name on;
     proxy_ssl_verify on;
     proxy_ssl_trusted_certificate /etc/ssl/certs/ca-certificates.crt;
+
+    # Headers
+    proxy_set_header Authorization "${CPI_AUTH}";
+    proxy_set_header Host $host;
   }
 }
